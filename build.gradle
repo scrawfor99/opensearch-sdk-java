@@ -49,6 +49,8 @@ apply from: 'gradle/formatting.gradle'
 apply plugin: 'java'
 apply plugin: 'opensearch.opensearchplugin'
 apply plugin: 'opensearch.testclusters'
+apply from: 'gradle/scripts/setExtensionName.gradle'
+apply from: 'gradle/scripts/setBaseAction.gradle'
 
 opensearchplugin {
     name 'opensearch-sdk-java'

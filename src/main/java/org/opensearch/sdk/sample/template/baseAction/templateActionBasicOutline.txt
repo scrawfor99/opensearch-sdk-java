@@ -1,4 +1,4 @@
-package template;
+package org.opensearch.sdk.sample.template;
 
 import java.util.List;
 import java.util.function.Function;

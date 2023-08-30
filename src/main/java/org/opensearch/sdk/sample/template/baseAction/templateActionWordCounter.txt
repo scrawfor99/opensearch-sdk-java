@@ -1,4 +1,4 @@
-package template;
+package org.opensearch.sdk.sample.template;
 
 import java.io.IOException;
 import java.util.List;
