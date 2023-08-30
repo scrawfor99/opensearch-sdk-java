@@ -1,0 +1,48 @@
+package template;
+
+import java.util.List;
+import java.util.function.Function;
+
+import org.opensearch.client.opensearch.OpenSearchClient;
+import org.opensearch.rest.NamedRoute;
+import org.opensearch.rest.RestRequest;
+import org.opensearch.rest.RestRequest.Method;
+import org.opensearch.rest.RestResponse;
+import org.opensearch.core.rest.RestStatus;
+import org.opensearch.sdk.ExtensionsRunner;
+import org.opensearch.sdk.rest.BaseExtensionRestHandler;
+
+public class templateAction extends BaseExtensionRestHandler {
+
+    private OpenSearchClient client;
+
+    public templateAction(ExtensionsRunner extensionsRunner) {
+        this.client = extensionsRunner.getSdkClient().initializeJavaClient();
+    }
+
+    @Override
+    public List<NamedRoute> routes() {
+        return List.of(
+                // Add custom routes here...
+                new NamedRoute.Builder().method(Method.POST)
+                        .path("/custom-route")
+                        .uniqueName("custom_extension:custom-route")
+                        .handler(customHandler)
+                        .build()
+        );
+    }
+
+    // Placeholder for Custom Handler
+    Function<RestRequest, RestResponse> customHandler = (request) -> {
+        // Implement your custom logic here...
+        return createEmptyJsonResponse(request, RestStatus.OK);
+    };
+
+    // Add other placeholder methods for different types of handlers (create, read, update, delete).
+
+    // Helper method to create a JSON response
+    private RestResponse createJsonResponse(RestRequest request, RestStatus status, String key, Object value) {
+        // Implement your JSON response logic here...
+        return null;
+    }
+}

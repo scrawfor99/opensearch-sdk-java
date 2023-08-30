@@ -1,0 +1,29 @@
+task useCRUDExtension {
+	doLast {
+		copy {
+			from 'src/main/java/org/opensearch/sdk/sample/template/baseAction/templateActionCRUD.txt'
+			into 'src/main/java/org/opensearch/sdk/sample/template'
+			rename 'templateActionCRUD.txt', 'templateAction.java'
+		}
+	}
+}
+
+task useWordCounter {
+	doLast {
+		copy {
+			from 'src/main/java/org/opensearch/sdk/sample/template/baseAction/templateActionWordCounter.txt'
+			into 'src/main/java/org/opensearch/sdk/sample/template'
+			rename 'templateActionWordCounter.txt', 'templateAction.java'
+		}
+	}
+}
+
+task useBasicOutline {
+	doLast {
+		copy {
+			from 'src/main/java/org/opensearch/sdk/sample/template/baseAction/templateActionBasicOutline.txt'
+			into 'src/main/java/org/opensearch/sdk/sample/template'
+			rename 'templateActionBasicOutline.txt', 'templateAction.java'
+		}
+	}
+}

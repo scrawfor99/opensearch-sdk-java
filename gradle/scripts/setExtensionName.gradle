@@ -1,0 +1,94 @@
+
+def setExtensionNameTask = task("setExtensionName") {
+	doLast {
+		def reader = new BufferedReader(new InputStreamReader(System.in))
+		println 'Enter the new extension name:'
+		String newExtensionName = reader.readLine()
+
+		// Load properties from the properties file (create it if it doesn't exist)
+		def properties = new Properties()
+		def propertiesFile = file('extension.properties')
+
+		if (propertiesFile.exists()) {
+			properties.load(new FileInputStream(propertiesFile))
+		}
+
+		// Retrieve the stored extension name from the properties or use the default
+		def storedExtensionName = properties.getProperty('extensionName', 'template')
+
+		def oldPackageName = storedExtensionName
+		def oldExtensionClassName = storedExtensionName + 'Extension'
+		def oldExtensionClassFileName = storedExtensionName + 'Extension.java'
+		def oldActionClassName = storedExtensionName + 'Action'
+		def oldActionClassFileName = storedExtensionName + 'Action.java'
+
+		def newPackageName = newExtensionName.toLowerCase() // Make the package name lowercase
+		def newExtensionClassName = newExtensionName + 'Extension'
+		def newActionClassName = newExtensionName + 'Action'
+
+		def oldPackageDir = "src/main/java/org/opensearch/sdk/sample/$oldPackageName"
+		def oldExtensionClassFilePath = "$oldPackageDir/$oldExtensionClassFileName"
+		def oldActionClassFilePath = "$oldPackageDir/$oldActionClassFileName"
+
+		def newPackageDir = "src/main/java/org/opensearch/sdk/sample/$newPackageName"
+		def newExtensionClassFilePath = "$newPackageDir/$newExtensionClassName" + ".java"
+		def newActionClassFilePath = "$newPackageDir/$newActionClassName" + ".java"
+
+		// Read the content of the file into a string
+		def oldExtensionContent = new File(oldExtensionClassFilePath).text
+
+		// Replace the old class name with the new extension name
+		def updatedExtensionContent = oldExtensionContent.replaceAll(oldExtensionClassName, newExtensionClassName)
+
+		// Replace the old package name with the new package name
+		updatedExtensionContent = updatedExtensionContent.replaceAll(oldPackageName, newPackageName)
+
+		// Replace the old templateAction name with the new action name
+		def oldActionName = storedExtensionName + 'Action'
+		def updatedActionContent = new File(oldActionClassFilePath).text.replaceAll(oldActionName, newActionClassName)
+		updatedActionContent = updatedActionContent.replaceAll(oldPackageName, newPackageName)
+
+		// Update the routes with the new action name
+		def oldUniqueNamePrefix = storedExtensionName + "_extension"
+		def newUniqueNamePrefix = "${newExtensionName.toLowerCase()}_extension"
+		updatedActionContent = updatedActionContent.replaceAll(oldUniqueNamePrefix, newUniqueNamePrefix)
+
+		// Update the file path by creating the new directory structure if it doesn't exist
+		new File(newPackageDir).mkdirs()
+
+		// Write the updated content back to the new file paths
+		new File(newExtensionClassFilePath).text = updatedExtensionContent
+		new File(newActionClassFilePath).text = updatedActionContent
+
+		// Optionally delete the old files if needed
+		def oldExtensionClassFile = new File(oldExtensionClassFilePath)
+		def oldActionClassFile = new File(oldActionClassFilePath)
+		if (oldExtensionClassFile.exists()) {
+			oldExtensionClassFile.delete()
+		}
+		if (oldActionClassFile.exists()) {
+			oldActionClassFile.delete()
+		}
+
+		// Delete the old package directory if it's empty
+		def oldPackageDirFile = new File(oldPackageDir)
+		if (oldPackageDirFile.exists() && oldPackageDirFile.listFiles().length == 0) {
+			oldPackageDirFile.deleteDir()
+		}
+
+		// Store the new extension name in the properties
+		properties.setProperty('extensionName', newExtensionName)
+
+		// Save the updated properties back to the file
+		properties.store(new FileWriter(propertiesFile), null)
+
+		println "Updating package name to: $newPackageName"
+		println "Updating extension name to: $newExtensionName"
+	}
+}
+
+setExtensionName.description = "Converts the template placeholders into the provided name."
+
+setExtensionNameTask.dependsOn(clean)
+
+setExtensionNameTask
