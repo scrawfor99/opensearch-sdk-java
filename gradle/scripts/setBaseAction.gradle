@@ -1,29 +1,48 @@
 task useCRUDExtension {
 	doLast {
+		String extensionName = getExtensionName()
+
 		copy {
-			from 'src/main/java/org/opensearch/sdk/sample/template/baseAction/templateActionCRUD.txt'
-			into 'src/main/java/org/opensearch/sdk/sample/template'
-			rename 'templateActionCRUD.txt', 'templateAction.java'
+			from "src/main/java/org/opensearch/sdk/sample/$extensionName/baseAction/$extensionNameActionCRUD.txt"
+			into "src/main/java/org/opensearch/sdk/sample/$extensionName"
+			rename "$extensionNameActionCRUD.txt", "$extensionNameAction.java"
 		}
 	}
 }
 
 task useWordCounter {
 	doLast {
+		String extensionName = getExtensionName()
+
 		copy {
-			from 'src/main/java/org/opensearch/sdk/sample/template/baseAction/templateActionWordCounter.txt'
-			into 'src/main/java/org/opensearch/sdk/sample/template'
-			rename 'templateActionWordCounter.txt', 'templateAction.java'
+			from "src/main/java/org/opensearch/sdk/sample/$extensionName/baseAction/$extensionNameActionWordCounter.txt"
+			into "src/main/java/org/opensearch/sdk/sample/$extensionName"
+			rename "$extensionNameActionWordCounter.txt", "$extensionNameAction.java"
 		}
 	}
 }
 
 task useBasicOutline {
 	doLast {
+		String extensionName = getExtensionName()
+
 		copy {
-			from 'src/main/java/org/opensearch/sdk/sample/template/baseAction/templateActionBasicOutline.txt'
-			into 'src/main/java/org/opensearch/sdk/sample/template'
-			rename 'templateActionBasicOutline.txt', 'templateAction.java'
+			from "src/main/java/org/opensearch/sdk/sample/$extensionName/baseAction/$extensionNameActionBasicOutline.txt"
+			into "src/main/java/org/opensearch/sdk/sample/$extensionName"
+			rename "$extensionNameActionBasicOutline.txt", "$extensionNameAction.java"
 		}
+	}
+}
+
+// Helper function to get the current extension name from extension.properties
+def getExtensionName() {
+	def properties = new Properties()
+	def propertiesFile = file('extension.properties')
+
+	if (propertiesFile.exists()) {
+		properties.load(new FileInputStream(propertiesFile))
+		return properties.getProperty('extensionName', 'template')
+	} else {
+		return 'template' // Default if properties file doesn't exist
 	}
 }

@@ -18,7 +18,7 @@ def setExtensionNameTask = task("setExtensionName") {
 
 
 		// Update the extensionName property in the template-settings.yml file
-		def templateSettingsFile = file(storedExtensionName + '-settings.yml')
+		def templateSettingsFile = file("src/main/resources/sample/$storedExtensionName/$storedExtensionName" + "-settings.yml")
 		def templateSettingsContent = templateSettingsFile.text
 		templateSettingsContent = templateSettingsContent.replaceAll("extensionName: $storedExtensionName", "extensionName: $newExtensionName")
 		templateSettingsFile.text = templateSettingsContent
@@ -27,6 +27,12 @@ def setExtensionNameTask = task("setExtensionName") {
 		def newSettingsFile = file("src/main/resources/sample/$newExtensionName/$newExtensionName-settings.yml")
 		newSettingsFile.parentFile.mkdirs()
 		oldSettingsFile.renameTo(newSettingsFile)
+
+		def oldSettingsPackage = file("src/main/resources/sample/$storedExtensionName")
+		if (oldSettingsPackage.exists()) {
+			oldSettingsPackage.delete()
+		}
+
 
 		def oldPackageName = storedExtensionName
 		def oldExtensionClassName = storedExtensionName + 'Extension'
