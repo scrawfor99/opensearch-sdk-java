@@ -41,7 +41,7 @@ public class HelloWorldExtension extends BaseExtension implements ActionExtensio
     /**
      * Optional classpath-relative path to a yml file containing extension settings.
      */
-    private static final String EXTENSION_SETTINGS_PATH = "/sample/helloworld-settings.yml";
+    private static final String EXTENSION_SETTINGS_PATH = "/sample/helloworld/helloworld-settings.yml";
 
     /**
      * Instantiate this extension, initializing the connection settings and REST actions.

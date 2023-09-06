@@ -149,7 +149,7 @@ curl -XPOST "localhost:9200/_extensions/initialize" -H "Content-Type:application
 "name":"hello-world",
 "uniqueId":"hello-world",
 "hostAddress":"127.0.0.1",
-"port":"4532",
+"port":"4500",
 "version":"1.0",
 "opensearchVersion":"3.0.0",
 "minimumCompatibleVersion":"3.0.0",
@@ -165,7 +165,7 @@ curl -XPOST "localhost:9200/_extensions/initialize" -H "Content-Type:application
 "name":"hello-world",
 "uniqueId":"hello-world",
 "hostAddress":"127.0.0.1",
-"port":"4532",
+"port":"4500",
 "version":"1.0",
 "opensearchVersion":"3.0.0",
 "minimumCompatibleVersion":"3.0.0",
@@ -297,7 +297,7 @@ The artifact will include extension settings for the sample Hello World extensio
 ```yaml
   extensionName: hello-world
   hostAddress: 127.0.0.1
-  hostPort: 4532
+  hostPort: 4500
   opensearchAddress: 127.0.0.1
   opensearchPort: 9200
 ```

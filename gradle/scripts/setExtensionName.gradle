@@ -16,6 +16,18 @@ def setExtensionNameTask = task("setExtensionName") {
 		// Retrieve the stored extension name from the properties or use the default
 		def storedExtensionName = properties.getProperty('extensionName', 'template')
 
+
+		// Update the extensionName property in the template-settings.yml file
+		def templateSettingsFile = file(storedExtensionName + '-settings.yml')
+		def templateSettingsContent = templateSettingsFile.text
+		templateSettingsContent = templateSettingsContent.replaceAll("extensionName: $storedExtensionName", "extensionName: $newExtensionName")
+		templateSettingsFile.text = templateSettingsContent
+
+		def oldSettingsFile = file("src/main/resources/sample/$storedExtensionName/$storedExtensionName-settings.yml")
+		def newSettingsFile = file("src/main/resources/sample/$newExtensionName/$newExtensionName-settings.yml")
+		newSettingsFile.parentFile.mkdirs()
+		oldSettingsFile.renameTo(newSettingsFile)
+
 		def oldPackageName = storedExtensionName
 		def oldExtensionClassName = storedExtensionName + 'Extension'
 		def oldExtensionClassFileName = storedExtensionName + 'Extension.java'
