@@ -16,6 +16,7 @@ import org.opensearch.common.xcontent.json.JsonXContent;
 import org.opensearch.core.xcontent.XContentBuilder;
 import org.opensearch.extensions.rest.ExtensionRestResponse;
 import org.opensearch.rest.RestRequest;
+import org.opensearch.sdk.SDKClient;
 import org.opensearch.sdk.rest.BaseExtensionRestHandler;
 import org.opensearch.sdk.rest.ExtensionRestHandler;
 
@@ -44,12 +45,16 @@ import static org.opensearch.rest.RestStatus.OK;
 public class RestHelloAction extends BaseExtensionRestHandler {
 
     private static final String TEXT_CONTENT_TYPE = "text/plain; charset=UTF-8";
-    private static final String GREETING = "Hello, %s!";
+    public static final String GREETING = "Hello, %s!";
     private static final String DEFAULT_NAME = "World";
 
     private String worldName = DEFAULT_NAME;
     private List<String> worldAdjectives = new ArrayList<>();
     private Random rand = new Random();
+
+    public RestHelloAction(SDKClient sdkClient) {
+        super(sdkClient);
+    }
 
     @Override
     public List<RouteHandler> routeHandlers() {

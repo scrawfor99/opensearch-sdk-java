@@ -42,6 +42,7 @@ import static org.opensearch.sdk.ssl.SSLConfigConstants.SSL_TRANSPORT_SERVER_PEM
 import static org.opensearch.sdk.ssl.SSLConfigConstants.SSL_TRANSPORT_TRUSTSTORE_ALIAS;
 import static org.opensearch.sdk.ssl.SSLConfigConstants.SSL_TRANSPORT_TRUSTSTORE_FILEPATH;
 import static org.opensearch.sdk.ssl.SSLConfigConstants.SSL_TRANSPORT_TRUSTSTORE_TYPE;
+import static org.opensearch.sdk.ssl.SSLConfigConstants.SSL_HTTP_ENABLED;
 
 /**
  * This class encapsulates the settings for an Extension.
@@ -56,6 +57,7 @@ public class ExtensionSettings {
 
     public static final Set<String> SECURITY_SETTINGS_KEYS = Set.of(
         "path.home", // TODO Find the right place to put this setting
+            SSL_HTTP_ENABLED,
         SSL_TRANSPORT_CLIENT_PEMCERT_FILEPATH,
         SSL_TRANSPORT_CLIENT_PEMKEY_FILEPATH,
         SSL_TRANSPORT_CLIENT_PEMTRUSTEDCAS_FILEPATH,

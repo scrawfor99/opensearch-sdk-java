@@ -17,7 +17,7 @@ import org.apache.logging.log4j.Logger;
 import org.opensearch.client.Request;
 import org.opensearch.client.Response;
 import org.opensearch.client.RestClient;
-import org.opensearch.rest.RestStatus;
+import org.opensearch.core.rest.RestStatus;
 import org.opensearch.test.rest.OpenSearchRestTestCase;
 import org.junit.Test;
 
@@ -44,8 +44,8 @@ public class TestHelloWorldIT extends OpenSearchRestTestCase {
             + ",\"hostAddress\":\"127.0.0.1\""
             + ",\"port\":\"4500\""
             + ",\"version\":\"1.0\""
-            + ",\"opensearchVersion\":\"2.9.0\""
-            + ",\"minimumCompatibleVersion\":\"2.9.0\"}";
+            + ",\"opensearchVersion\":\"2.10.0\""
+            + ",\"minimumCompatibleVersion\":\"2.10.0\"}";
         Response response = makeRequest(client(), "POST", EXTENSION_INIT_URI, null, toHttpEntity(helloWorldInitRequestBody));
 
         assertEquals(RestStatus.ACCEPTED, restStatus(response));

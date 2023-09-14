@@ -20,6 +20,7 @@ import java.util.List;
  */
 public final class SSLConfigConstants {
     public static final String SSL_TRANSPORT_ENABLED = "ssl.transport.enabled";
+    public static final String SSL_HTTP_ENABLED = "ssl.http.enabled";
     // TODO Replace this with true when security changes are complete
     public static final boolean SSL_TRANSPORT_ENABLED_DEFAULT = false;
     public static final String SSL_TRANSPORT_ENFORCE_HOSTNAME_VERIFICATION = "ssl.transport.enforce_hostname_verification";

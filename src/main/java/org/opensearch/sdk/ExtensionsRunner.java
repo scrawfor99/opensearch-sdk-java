@@ -18,9 +18,11 @@ import org.apache.logging.log4j.Logger;
 import org.opensearch.action.ActionType;
 import org.opensearch.action.support.TransportAction;
 import org.opensearch.cluster.metadata.IndexNameExpressionResolver;
-import org.opensearch.common.io.stream.NamedWriteableRegistry;
+import org.opensearch.core.common.io.stream.NamedWriteableRegistry;
 import org.opensearch.common.settings.Setting;
 import org.opensearch.common.settings.Settings;
+import org.opensearch.client.opensearch.OpenSearchClient;
+import org.opensearch.discovery.InitializeExtensionSecurityRequest;
 import org.opensearch.core.xcontent.NamedXContentRegistry;
 import org.opensearch.discovery.InitializeExtensionRequest;
 import org.opensearch.extensions.DiscoveryExtensionNode;
@@ -94,6 +96,8 @@ public class ExtensionsRunner {
      * Custom namedWriteable from the extension's getNamedWriteable. This field is initialized in the constructor.
      */
     private final List<NamedWriteableRegistry.Entry> customNamedWriteables;
+
+    private OpenSearchClient extensionRestClient;
 
     /**
      * Custom settings from the extension's getSettings. This field is initialized in the constructor.
@@ -341,6 +345,20 @@ public class ExtensionsRunner {
     }
 
     /**
+     * Initializes a REST Client for this extension to interact with an OpenSearch cluster on its own behalf
+     *
+     * @param serviceAccountToken Access token that permits an extension to make requests on its own behalf.
+     *                            Common examples of usages of service account tokens include interacting with
+     *                            an extension's reserved indices.
+     */
+    public void initializeExtensionRestClient(String serviceAccountToken) {
+        OpenSearchClient restClient = getSdkClient().initializeJavaClientWithHeaders(
+                Map.of("Authorization", "Bearer " + serviceAccountToken)
+        );
+        this.extensionRestClient = restClient;
+    }
+
+    /**
      * Returns the discovery extension node set during extension initialization
      *
      * @return the extensionNode
@@ -386,6 +404,15 @@ public class ExtensionsRunner {
             false,
             InitializeExtensionRequest::new,
             (request, channel, task) -> channel.sendResponse(extensionsInitRequestHandler.handleExtensionInitRequest(request))
+        );
+
+        transportService.registerRequestHandler(
+                ExtensionsManager.REQUEST_EXTENSION_REGISTER_SECURITY_SETTINGS,
+                ThreadPool.Names.GENERIC,
+                false,
+                false,
+                InitializeExtensionSecurityRequest::new,
+                (request, channel, task) -> channel.sendResponse(extensionsInitRequestHandler.handleExtensionSecurityInitRequest(request))
         );
 
         transportService.registerRequestHandler(
@@ -457,6 +484,15 @@ public class ExtensionsRunner {
      */
     public Settings getSettings() {
         return settings;
+    }
+
+    /**
+     * Returns the Extension rest client instance used by this extension.
+     *
+     * @return The Extension rest client instance.
+     */
+    public OpenSearchClient getExtensionRestClient() {
+        return extensionRestClient;
     }
 
     /**

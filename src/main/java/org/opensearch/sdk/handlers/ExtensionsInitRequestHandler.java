@@ -17,6 +17,8 @@ import org.opensearch.discovery.InitializeExtensionResponse;
 import org.opensearch.sdk.ExtensionsRunner;
 import org.opensearch.sdk.SDKTransportService;
 import org.opensearch.transport.TransportService;
+import org.opensearch.discovery.InitializeExtensionSecurityRequest;
+import org.opensearch.discovery.InitializeExtensionSecurityResponse;
 
 import static org.opensearch.sdk.ExtensionsRunner.NODE_NAME_SETTING;
 
@@ -92,5 +94,20 @@ public class ExtensionsInitRequestHandler {
             // Trigger pending updates requiring completion of the above actions
             extensionsRunner.getSdkClusterService().getClusterSettings().sendPendingSettingsUpdateConsumers();
         }
+    }
+    /**
+     * Handles a extension request from OpenSearch. This is the first request for the transport communication and will initialize the extension and will be a part of OpenSearch bootstrap.
+     *
+     * @param extensionInitSecurityRequest  The request to handle.
+     * @return A response to OpenSearch validating that this is an extension.
+     */
+    public InitializeExtensionSecurityResponse handleExtensionSecurityInitRequest(
+            InitializeExtensionSecurityRequest extensionInitSecurityRequest
+    ) {
+        logger.info("Registering Extension Request received from OpenSearch");
+
+        extensionsRunner.initializeExtensionRestClient(extensionInitSecurityRequest.getServiceAccountToken());
+
+        return new InitializeExtensionSecurityResponse(extensionsRunner.getExtensionNode().getId());
     }
 }

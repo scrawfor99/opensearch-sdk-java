@@ -15,6 +15,8 @@ import org.opensearch.rest.RestHandler.Route;
 import org.opensearch.rest.RestRequest;
 import org.opensearch.rest.RestRequest.Method;
 import org.opensearch.rest.RestStatus;
+import org.opensearch.sdk.ExtensionSettings;
+import org.opensearch.sdk.SDKClient;
 import org.opensearch.test.OpenSearchTestCase;
 import org.junit.jupiter.api.Test;
 
@@ -25,7 +27,10 @@ import java.util.function.Function;
 
 public class TestBaseExtensionRestHandler extends OpenSearchTestCase {
 
-    private final BaseExtensionRestHandler handler = new BaseExtensionRestHandler() {
+    private final ExtensionSettings extensionSettings = new ExtensionSettings("", "", "", "localhost", "9200");
+    private final SDKClient sdkClient = new SDKClient(extensionSettings);
+    private final BaseExtensionRestHandler handler = new BaseExtensionRestHandler(sdkClient) {
+
         @Override
         public List<RouteHandler> routeHandlers() {
             return List.of(new RouteHandler(Method.GET, "/foo", handleFoo));
@@ -59,7 +64,7 @@ public class TestBaseExtensionRestHandler extends OpenSearchTestCase {
 
     @Test
     public void testHandlerDefaultRoutes() {
-        BaseExtensionRestHandler defaultHandler = new BaseExtensionRestHandler() {
+        BaseExtensionRestHandler defaultHandler = new BaseExtensionRestHandler(sdkClient) {
         };
         assertTrue(defaultHandler.routes().isEmpty());
         assertTrue(defaultHandler.routeHandlers().isEmpty());
@@ -267,7 +272,7 @@ public class TestBaseExtensionRestHandler extends OpenSearchTestCase {
 
     @Test
     public void testCreateEmptyJsonResponse() {
-        BaseExtensionRestHandler handlerWithEmptyJsonResponse = new BaseExtensionRestHandler() {
+        BaseExtensionRestHandler handlerWithEmptyJsonResponse = new BaseExtensionRestHandler(sdkClient) {
             @Override
             public List<RouteHandler> routeHandlers() {
                 return List.of(new RouteHandler(Method.GET, "/emptyJsonResponse", handleEmptyJsonResponse));
