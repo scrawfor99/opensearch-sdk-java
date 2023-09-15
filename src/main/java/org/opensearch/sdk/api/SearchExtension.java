@@ -12,9 +12,9 @@ package org.opensearch.sdk.api;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.Sort;
 import org.opensearch.common.CheckedFunction;
-import org.opensearch.common.io.stream.NamedWriteable;
-import org.opensearch.common.io.stream.StreamInput;
-import org.opensearch.common.io.stream.Writeable;
+import org.opensearch.core.common.io.stream.NamedWriteable;
+import org.opensearch.core.common.io.stream.StreamInput;
+import org.opensearch.core.common.io.stream.Writeable;
 import org.opensearch.common.lucene.search.function.ScoreFunction;
 import org.opensearch.core.ParseField;
 import org.opensearch.core.xcontent.ContextParser;
@@ -185,7 +185,7 @@ public interface SearchExtension {
     }
 
     /**
-     * The executor service provider (registered through {@link Extension#getExecutorBuilders(Settings)} to be used at search
+     * The executor service provider (registered through {@link Extension #getExecutorBuilders(Settings)} to be used at search
      * time by {@code IndexSearcher}. The {@link IllegalStateException} is going to be thrown if more then one
      * plugin tries to register index searcher executor.
      */

@@ -11,13 +11,12 @@ package org.opensearch.sdk.handlers;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.opensearch.action.ActionListener;
+import org.opensearch.core.action.ActionListener;
 import org.opensearch.action.ActionRequest;
-import org.opensearch.action.ActionResponse;
-import org.opensearch.action.ActionType;
-import org.opensearch.common.bytes.BytesReference;
+import org.opensearch.core.action.ActionResponse;
+import org.opensearch.core.common.bytes.BytesReference;
 import org.opensearch.common.io.stream.BytesStreamOutput;
-import org.opensearch.common.io.stream.StreamInput;
+import org.opensearch.core.common.io.stream.StreamInput;
 import org.opensearch.extensions.ExtensionsManager;
 import org.opensearch.extensions.action.ExtensionActionRequest;
 import org.opensearch.extensions.action.ExtensionActionResponse;
@@ -75,13 +74,6 @@ public class ExtensionActionRequestHandler {
         byte[] requestBytes = request.getRequestBytes().toByteArray();
         final RemoteExtensionActionResponse response = new RemoteExtensionActionResponse(false, new byte[0]);
 
-        // Find matching ActionType instance
-        ActionType<? extends ActionResponse> action = sdkClient.getActionFromClassName(request.getAction());
-        if (action == null) {
-            response.setResponseBytesAsString("No action [" + request.getAction() + "] is registered.");
-            return response;
-        }
-        logger.debug("Found matching action [" + action.name() + "], an instance of [" + action.getClass().getName() + "]");
 
         // Extract request class name from bytes and instantiate request
         int nullPos = indexOf(requestBytes, RemoteExtensionActionRequest.UNIT_SEPARATOR);
@@ -101,7 +93,7 @@ public class ExtensionActionRequestHandler {
         // TODO: We need async client.execute to hide these action listener details and return the future directly
         // https://github.com/opensearch-project/opensearch-sdk-java/issues/584
         CompletableFuture<RemoteExtensionActionResponse> futureResponse = new CompletableFuture<>();
-        sdkClient.execute(action, actionRequest, ActionListener.wrap(r -> {
+        sdkClient.execute(actionRequest, ActionListener.wrap(r -> {
             byte[] bytes = new byte[0];
             try (BytesStreamOutput out = new BytesStreamOutput()) {
                 ((ActionResponse) r).writeTo(out);
