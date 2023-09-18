@@ -4,9 +4,8 @@ hostPort: 4500
 opensearchAddress: 127.0.0.1
 opensearchPort: 9200
 ssl.transport.enabled: true
-ssl.transport.pemcert_filepath: extension-01.pem
-ssl.transport.pemkey_filepath: extension-01-key.pem
+ssl.transport.pemcert_filepath: admin.pem
+ssl.transport.pemkey_filepath: admin-key.pem
 ssl.transport.pemtrustedcas_filepath: root-ca.pem
 ssl.transport.enforce_hostname_verification: false
-path.home: /Users/steecraw/opensearch-sdk-java/src/main/java/org/opensearch/sdk/sample/helloworld
-
+path.home: /Users/steecraw/opensearch-sdk-java
