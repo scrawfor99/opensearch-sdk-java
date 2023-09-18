@@ -11,7 +11,7 @@ package org.opensearch.sdk.handlers;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.opensearch.common.bytes.BytesReference;
+import org.opensearch.core.common.bytes.BytesReference;
 import org.opensearch.extensions.rest.ExtensionRestRequest;
 import org.opensearch.extensions.rest.ExtensionRestResponse;
 import org.opensearch.extensions.rest.RestExecuteOnExtensionResponse;
@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.opensearch.rest.BytesRestResponse.TEXT_CONTENT_TYPE;
-import static org.opensearch.rest.RestStatus.NOT_FOUND;
+import static org.opensearch.core.rest.RestStatus.NOT_FOUND;
 
 /**
  * This class handles the request from OpenSearch to a {@link ExtensionsRunner #startTransportService(TransportService transportService)} call.

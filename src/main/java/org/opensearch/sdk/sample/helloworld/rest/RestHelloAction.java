@@ -10,9 +10,10 @@
 package org.opensearch.sdk.sample.helloworld.rest;
 
 import org.opensearch.OpenSearchParseException;
-import org.opensearch.common.bytes.BytesReference;
+import org.opensearch.core.common.bytes.BytesReference;
 import org.opensearch.common.xcontent.XContentType;
 import org.opensearch.common.xcontent.json.JsonXContent;
+import org.opensearch.core.xcontent.MediaType;
 import org.opensearch.core.xcontent.XContentBuilder;
 import org.opensearch.extensions.rest.ExtensionRestResponse;
 import org.opensearch.rest.RestRequest;
@@ -33,9 +34,9 @@ import static org.opensearch.rest.RestRequest.Method.DELETE;
 import static org.opensearch.rest.RestRequest.Method.GET;
 import static org.opensearch.rest.RestRequest.Method.POST;
 import static org.opensearch.rest.RestRequest.Method.PUT;
-import static org.opensearch.rest.RestStatus.BAD_REQUEST;
-import static org.opensearch.rest.RestStatus.NOT_ACCEPTABLE;
-import static org.opensearch.rest.RestStatus.OK;
+import static org.opensearch.core.rest.RestStatus.BAD_REQUEST;
+import static org.opensearch.core.rest.RestStatus.NOT_ACCEPTABLE;
+import static org.opensearch.core.rest.RestStatus.OK;
 
 /**
  * Sample REST Handler (REST Action).
@@ -76,7 +77,7 @@ public class RestHelloAction extends BaseExtensionRestHandler {
     private Function<RestRequest, ExtensionRestResponse> handlePostRequest = (request) -> {
         if (request.hasContent()) {
             String adjective = "";
-            XContentType contentType = request.getXContentType();
+            MediaType contentType = request.getMediaType();
             if (contentType == null) {
                 // Plain text
                 adjective = request.content().utf8ToString();

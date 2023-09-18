@@ -13,12 +13,12 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Map;
-import org.opensearch.action.ActionListener;
+import org.opensearch.core.action.ActionListener;
 import org.opensearch.client.WarningFailureException;
 import org.opensearch.client.opensearch.OpenSearchClient;
 import org.opensearch.client.opensearch.indices.CreateIndexRequest;
 import org.opensearch.client.opensearch.indices.DeleteIndexRequest;
-import org.opensearch.common.io.stream.StreamInput;
+import org.opensearch.core.common.io.stream.StreamInput;
 import org.opensearch.extensions.ExtensionsManager;
 import org.opensearch.extensions.action.RemoteExtensionActionResponse;
 import org.opensearch.extensions.rest.ExtensionRestResponse;
@@ -39,7 +39,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 import static org.opensearch.rest.RestRequest.Method.GET;
-import static org.opensearch.rest.RestStatus.OK;
+import static org.opensearch.core.rest.RestStatus.OK;
 import static org.opensearch.sdk.sample.helloworld.rest.RestHelloAction.GREETING;
 
 /**

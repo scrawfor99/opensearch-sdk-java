@@ -11,6 +11,7 @@ package org.opensearch.sdk.handlers;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.opensearch.action.ActionType;
 import org.opensearch.core.action.ActionListener;
 import org.opensearch.action.ActionRequest;
 import org.opensearch.core.action.ActionResponse;
@@ -75,6 +76,14 @@ public class ExtensionActionRequestHandler {
         final RemoteExtensionActionResponse response = new RemoteExtensionActionResponse(false, new byte[0]);
 
 
+        // Find matching ActionType instance
+        ActionType<? extends ActionResponse> action = sdkClient.getActionFromClassName(request.getAction());
+        if (action == null) {
+            response.setResponseBytesAsString("No action [" + request.getAction() + "] is registered.");
+            return response;
+        }
+        logger.debug("Found matching action [" + action.name() + "], an instance of [" + action.getClass().getName() + "]");
+
         // Extract request class name from bytes and instantiate request
         int nullPos = indexOf(requestBytes, RemoteExtensionActionRequest.UNIT_SEPARATOR);
         String requestClassName = new String(Arrays.copyOfRange(requestBytes, 0, nullPos + 1), StandardCharsets.UTF_8).stripTrailing();
@@ -93,7 +102,7 @@ public class ExtensionActionRequestHandler {
         // TODO: We need async client.execute to hide these action listener details and return the future directly
         // https://github.com/opensearch-project/opensearch-sdk-java/issues/584
         CompletableFuture<RemoteExtensionActionResponse> futureResponse = new CompletableFuture<>();
-        sdkClient.execute(actionRequest, ActionListener.wrap(r -> {
+        sdkClient.execute(action, actionRequest, ActionListener.wrap(r -> {
             byte[] bytes = new byte[0];
             try (BytesStreamOutput out = new BytesStreamOutput()) {
                 ((ActionResponse) r).writeTo(out);
